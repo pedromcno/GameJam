@@ -79,11 +79,15 @@
 
             this.chopper = this.add.sprite(x, y, 'chopper');
             this.chopper.anchor.setTo(0.5, 3);
+
             this.chopper.animations.add('fly_left', [0, 1], 20, true);
             this.chopper.animations.add('fly_right', [2, 3], 20, true);
             this.chopper.animations.play('fly_right');
             this.game.physics.enable(this.chopper, Phaser.Physics.ARCADE);
             this.chopper.body.velocity.x = 50;
+            
+            this.chopper.hits = 0;
+            this.game.physics.arcade.enable(this.chopper);
         },
 
         addBackground: function() {
@@ -106,17 +110,13 @@
             if (this.game.input.activePointer.isDown) {
               this.fire();
             }
-            for (var i = 0; i < this.bullets.length; i++) {
-              if (this.checkOverlap(this.bullets.getAt(i), this.chopper)) {
-			      this.soundExplosion.play();
-				  this.addScore(1);
-                  this.chopper.kill();
-              }
-              else {
-                  //text.text = 'Drag the sprites. Overlapping: false';
-              }
-            }
+            this.game.physics.arcade.overlap(this.chopper, this.bullets, this.hitChopper, null, this);
 
+            if (this.chopper.hits === 10) {
+                // this.soundExplosion.play();
+                // this.addScore(1);
+                this.chopper.kill();
+            }
         },
 
         fire: function() {
@@ -133,11 +133,10 @@
             }
         },
 
-        checkOverlap: function (spriteA, spriteB) {
-            var boundsA = spriteA.getBounds();
-            var boundsB = spriteB.getBounds();
-
-            return Phaser.Rectangle.intersects(boundsA, boundsB);
+        hitChopper: function (chopper, bullet) {
+            //chopper.kill();
+            chopper.hits += 1;
+            bullet.kill();
         },
 
         playerAiming: function() {

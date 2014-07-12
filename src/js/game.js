@@ -27,8 +27,6 @@
 
             this.player = this.add.sprite(x, y, 'player');
             this.player.anchor.setTo(0.5, 1);
-            this.player.scale.x = 2;
-            this.player.scale.y = 2;
         },
 
         addVan: function() {
@@ -37,12 +35,10 @@
 
             this.van = this.add.sprite(x, y, 'van');
             this.van.anchor.setTo(0.5, 1);
-            this.van.scale.x = 2;
-            this.van.scale.y = 2;
         },
 
         addBackground: function() {
-            var background = this.add.sprite(0, 0, 'background');
+            this.add.sprite(0, 0, 'background');
         },
 
         addBullets: function() {

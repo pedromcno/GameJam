@@ -23,7 +23,6 @@
       this.startTxt.x = this.game.width / 2 - this.startTxt.textWidth / 2;
 
       this.input.onDown.add(this.onDown, this);
-      this.onDown();
     },
 
     update: function () {
@@ -31,7 +30,7 @@
     },
 
     onDown: function () {
-        this.game.scale.startFullScreen();
+      this.game.scale.startFullScreen();
       this.game.state.start('game');
     }
   };

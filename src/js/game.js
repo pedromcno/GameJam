@@ -138,7 +138,7 @@
         },
 
         incineratePlantAt: function(index) {
-            if(this.farm.getAt(index)) {
+            if(this.farm.getAt(index).animations) {
                 this.farm.getAt(index).animations.play('burn', 7, true);
             }
         },

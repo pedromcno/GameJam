@@ -7,6 +7,12 @@
 
         this.fireRate = 100;
         this.nextFire = 0;
+		
+		// Sound Files
+		this.soundShoot = null;
+		this.soundSmoke = null;
+		this.soundDead = null;
+		this.soundExplosion = null;
     }
 
     Game.prototype = {
@@ -16,12 +22,21 @@
             this.addVan();
             this.addChopper();
             this.addPlayer();
+			this.addSound();
             this.input.onDown.add(this.onInputDown, this);
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.addBullets();
         },
 
+		addSound: function() {
+		  this.soundShoot = this.add.audio('fire');
+		  this.soundSmoke = this.add.audio('smoking');
+		  this.soundDead = this.add.audio('dead');
+		  this.soundExplosion = this.add.audio('explosion');
+		  
+		},
+		
         addPlayer: function() {
             var x = this.game.width / 2,
                 y = this.game.height - this.van.height;
@@ -60,11 +75,21 @@
           this.bullets.setAll('checkWorldBounds', true);
           this.bullets.setAll('outOfBoundsKill', true);
         },
+		
 
         update: function () {
             if (this.game.input.activePointer.isDown) {
               this.fire();
             }
+            for (var i = 0; i < this.bullets.length; i++) {
+              if (this.checkOverlap(this.bullets.getAt(i), this.chopper)) {
+                  this.chopper.kill();
+              }
+              else {
+                  //text.text = 'Drag the sprites. Overlapping: false';
+              }
+            }
+            
         },
 
         fire: function() {
@@ -73,7 +98,15 @@
                     var bullet = this.bullets.getFirstDead();
                     bullet.reset(this.player.x - this.player.width/20, this.player.y - this.player.height);
                     this.game.physics.arcade.moveToPointer(bullet, 300);
+					this.soundShoot.play();
             }
+        },
+
+        checkOverlap: function (spriteA, spriteB) {
+            var boundsA = spriteA.getBounds();
+            var boundsB = spriteB.getBounds();
+
+            return Phaser.Rectangle.intersects(boundsA, boundsB);
         },
 
         onInputDown: function () {

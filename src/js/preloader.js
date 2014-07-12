@@ -18,6 +18,7 @@
       this.load.image('background', 'assets/background.png');
       this.load.image('van', 'assets/sprites/van.png');
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
+      this.load.image('bullet', 'assets/bullet.png');
     },
 
     create: function () {

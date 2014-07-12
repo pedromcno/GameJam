@@ -215,6 +215,7 @@
           // hitTrooper.destroy();
           hitTrooper.kill();
           this.addScore(1);
+          this.soundDead.play();
         }
 
     };

@@ -23,6 +23,7 @@
         create: function () {
             this.addBackground();
             this.addChopper();
+            this.addChoppers();
             this.addFarm();
             this.addVan();
             this.addPlayer();
@@ -90,6 +91,29 @@
             this.chopper.hits = 0;
             this.game.physics.arcade.enable(this.chopper);
         },
+        addChoppers: function() {
+            this.choppers = this.game.add.group();
+
+
+            for (var i = 0; i < 6; i++)
+            {
+                //  This creates a new Phaser.Sprite instance within the group
+                //  It will be randomly placed within the world and use the 'baddie' image to display
+                var heli = this.choppers.create(400, Math.random() * 100, 'chopper');
+                heli.enableBody = true;
+                this.game.physics.enable(heli, Phaser.Physics.ARCADE);
+
+                heli.body.velocity.x =  (10 + Math.random() * 50) * (-1);
+            }
+
+            this.choppers.callAll('animations.add', 'animations', 'fly_left', [0, 1], 20, true);
+            this.choppers.callAll('animations.play', 'animations', 'fly_left');
+            this.choppers.enableBody = true;
+            this.choppers.physicsBodyType = Phaser.Physics.ARCADE;
+
+
+        },
+
 
         addBackground: function() {
             this.add.sprite(0, 0, 'background');

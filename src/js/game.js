@@ -22,9 +22,9 @@
 
         create: function () {
             this.addBackground();
-            this.addVan();
             this.addChopper();
             this.addFarm();
+            this.addVan();
             this.addPlayer();
             this.addSound();
             this.input.onDown.add(this.onInputDown, this);

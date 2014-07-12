@@ -21,6 +21,7 @@
       this.load.image('van', 'assets/sprites/van.png');
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
       this.load.image('bullet', 'assets/bullet.png');
+      this.load.spritesheet('plant', 'assets/sprites/plant.png', 20, 25, 10);
 	  this.load.audio('explosion',[ '/assets/sounds/explosion.mp3','/assets/sounds/explosion.ogg']);
 	  this.load.audio('fire', [ '/assets/sounds/mg.mp3','/assets/sounds/mg.ogg']);
 	  this.load.audio('smoking',[ '/assets/sounds/smoking.mp3','/assets/sounds/smoking.ogg']);

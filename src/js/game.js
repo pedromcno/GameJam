@@ -14,7 +14,6 @@
         this.soundSmoke = null;
         this.soundDead = null;
         this.soundExplosion = null;
-        this.farm = new window['ganja-farmer'].Farm();
     }
 
     Game.prototype = {
@@ -23,6 +22,7 @@
             this.addBackground();
             this.addVan();
             this.addChopper();
+            this.addFarm();
             this.addPlayer();
             this.addSound();
             this.input.onDown.add(this.onInputDown, this);
@@ -97,6 +97,17 @@
           this.bullets.setAll('outOfBoundsKill', true);
         },
 
+        addFarm: function() {
+            this.farm = this.game.add.group();
+            for(var i = 0; i < 25 ; i++) {
+                this.farm.create(7+i * 12, 155, 'plant', false);
+            }
+            this.farm.callAll('animations.add', 'animations', 'burn', [2, 3, 4], 10, true);
+        },
+
+        incineratePlantAt: function(index) {
+            this.farm.getAt(index).animations.play('burn', 7, true);
+        },
 
         update: function () {
             this.playerAiming();

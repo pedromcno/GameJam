@@ -23,6 +23,7 @@
         create: function () {
             this.addBackground();
             this.addChopper();
+            this.addChoppers();
             this.addFarm();
             this.addVan();
             this.addPlayer();
@@ -90,6 +91,29 @@
             this.chopper.hits = 0;
             this.game.physics.arcade.enable(this.chopper);
         },
+        addChoppers: function() {
+            this.choppers = this.game.add.group();
+
+
+            for (var i = 0; i < 6; i++)
+            {
+                //  This creates a new Phaser.Sprite instance within the group
+                //  It will be randomly placed within the world and use the 'baddie' image to display
+                var heli = this.choppers.create(400, Math.random() * 100, 'chopper');
+                heli.enableBody = true;
+                this.game.physics.enable(heli, Phaser.Physics.ARCADE);
+
+                heli.body.velocity.x =  (10 + Math.random() * 50) * (-1);
+            }
+
+            this.choppers.callAll('animations.add', 'animations', 'fly_left', [0, 1], 20, true);
+            this.choppers.callAll('animations.play', 'animations', 'fly_left');
+            this.choppers.enableBody = true;
+            this.choppers.physicsBodyType = Phaser.Physics.ARCADE;
+
+
+        },
+
 
         addBackground: function() {
             this.add.sprite(0, 0, 'background');
@@ -128,7 +152,7 @@
             if (this.chopper.hits === 10 && this.chopper.alive) {
                 this.chopper.kill();
                 this.soundExplosion.play();
-                this.addScore();
+                this.addScore(20);
             }
 
             this.trooperManager();
@@ -178,8 +202,8 @@
           this.player.animations.play(fireState + '' + aimDirection);
         },
 
-        addScore : function() {
-          this.score +=1;
+        addScore : function(points) {
+          this.score +=points;
           this.scoreText.text = 'Score: '+ this.score;
     		},
 
@@ -201,7 +225,7 @@
           this.paraTrooper = this.add.sprite(x, y, 'paraTrooper');
           this.paraTrooper.enableBody = true;
 
-          this.paraTrooper.animations.add('fly', [0, 4], 4, true);
+          this.paraTrooper.animations.add('fly', [0, 1, 2, 3, 4, 3 ,2, 1, 0], 8, true);
           this.paraTrooper.animations.play('fly');
 
           this.game.physics.enable(this.paraTrooper, Phaser.Physics.ARCADE);
@@ -218,6 +242,8 @@
         trooperHit: function(hitTrooper) {
           // hitTrooper.destroy();
           hitTrooper.kill();
+          this.addScore(1);
+          this.soundDead.play();
         }
 
     };

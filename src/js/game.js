@@ -45,6 +45,10 @@
             this.chopper.anchor.setTo(0.5, 3);
             this.chopper.animations.add('fly_left');
             this.chopper.animations.play('fly_left', 20, true, true);
+            this.chopper.physicsBodyType = Phaser.Physics.ARCADE;
+            this.chopper.hits = 0;
+
+            this.game.physics.arcade.enable(this.chopper);
         },
 
         addBackground: function() {
@@ -65,15 +69,12 @@
             if (this.game.input.activePointer.isDown) {
               this.fire();
             }
-            for (var i = 0; i < this.bullets.length; i++) {
-              if (this.checkOverlap(this.bullets.getAt(i), this.chopper)) {
-                  this.chopper.kill();
-              }
-              else {
-                  //text.text = 'Drag the sprites. Overlapping: false';
-              }
+
+            this.game.physics.arcade.overlap(this.chopper, this.bullets, this.hitChopper, null, this);
+
+            if (this.chopper.hits === 10) {
+                this.chopper.kill();
             }
-            
         },
 
         fire: function() {
@@ -85,11 +86,10 @@
             }
         },
 
-        checkOverlap: function (spriteA, spriteB) {
-            var boundsA = spriteA.getBounds();
-            var boundsB = spriteB.getBounds();
-
-            return Phaser.Rectangle.intersects(boundsA, boundsB);
+        hitChopper: function (chopper, bullet) {
+            //chopper.kill();
+            chopper.hits += 1;
+            bullet.kill();
         },
 
         onInputDown: function () {

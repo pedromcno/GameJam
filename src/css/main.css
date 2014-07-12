@@ -11,8 +11,6 @@ html, body {
 }
 
 .game {
-  width: 640px;
-  height: 480px;
-  margin: 20px auto;
-  cursor: crosshair;
+  display: block;
+  margin: 0 auto;
 }

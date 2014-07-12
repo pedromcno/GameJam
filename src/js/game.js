@@ -63,6 +63,15 @@
             if (this.game.input.activePointer.isDown) {
               this.fire();
             }
+            for (var i = 0; i < this.bullets.length; i++) {
+              if (this.checkOverlap(this.bullets.getAt(i), this.chopper)) {
+                  this.chopper.kill();
+              }
+              else {
+                  //text.text = 'Drag the sprites. Overlapping: false';
+              }
+            }
+            
         },
 
         fire: function() {
@@ -72,6 +81,13 @@
                     bullet.reset(this.player.x - this.player.width/20, this.player.y - this.player.height);
                     this.game.physics.arcade.moveToPointer(bullet, 300);
             }
+        },
+
+        checkOverlap: function (spriteA, spriteB) {
+            var boundsA = spriteA.getBounds();
+            var boundsB = spriteB.getBounds();
+
+            return Phaser.Rectangle.intersects(boundsA, boundsB);
         },
 
         onInputDown: function () {

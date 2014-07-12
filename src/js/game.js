@@ -23,7 +23,7 @@
 
         create: function () {
             this.addBackground();
-            this.addChopper();
+            //this.addChopper();
             this.addChoppers();
             this.addFarm();
             this.addVan();
@@ -76,6 +76,7 @@
             this.van.anchor.setTo(0.5, 1);
         },
 
+        /*
         addChopper: function() {
             var x = this.game.width / 4,
                 y = this.game.height/2;
@@ -91,7 +92,8 @@
 
             this.chopper.hits = 0;
             this.game.physics.arcade.enable(this.chopper);
-        },
+        },*/
+        
         addChoppers: function() {
             this.choppers = this.game.add.group();
 
@@ -105,6 +107,8 @@
                 this.game.physics.enable(heli, Phaser.Physics.ARCADE);
 
                 heli.body.velocity.x =  (10 + Math.random() * 50) * (-1);
+
+                heli.hits = 0;
             }
 
             this.choppers.callAll('animations.add', 'animations', 'fly_left', [0, 1], 20, true);
@@ -149,12 +153,16 @@
             if (this.game.input.activePointer.isDown) {
               this.fire();
             }
-            this.game.physics.arcade.overlap(this.chopper, this.bullets, this.hitChopper, null, this);
+            this.game.physics.arcade.overlap(this.choppers, this.bullets, this.hitChopper, null, this);
             this.game.physics.arcade.overlap(this.paraTrooper, this.bullets, this.trooperHit, null, this);
 
-            if (this.chopper.hits === 10 && this.chopper.alive) {
-                this.killChopper();
-            }
+            this.choppers.forEachAlive(function(chopper) {
+              if (chopper.hits === 10) {
+                this.killChopper(chopper);
+              }
+            }, this);
+
+            
 
             this.trooperManager();
         },
@@ -178,14 +186,15 @@
             bullet.kill();
         },
 
-        killChopper: function () {
+        
+        killChopper: function (chopper) {
           
-          this.explosion = this.add.sprite(this.chopper.body.x+this.chopper.width/2, this.chopper.body.y, 'explosion');
+          this.explosion = this.add.sprite(chopper.body.x, chopper.body.y-chopper.height, 'explosion');
 
             var ani = this.explosion.animations.add('run', null, 20, false);
             this.explosion.animations.play('run');
 
-            this.chopper.kill();
+            chopper.kill();
             this.soundExplosion.play();
 
             this.addScore(10);

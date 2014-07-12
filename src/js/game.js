@@ -123,12 +123,15 @@
               this.fire();
             }
             this.game.physics.arcade.overlap(this.chopper, this.bullets, this.hitChopper, null, this);
+            this.game.physics.arcade.overlap(this.paraTrooper, this.bullets, this.trooperHit, null, this);
 
             if (this.chopper.hits === 10 && this.chopper.alive) {
                 this.chopper.kill();
                 this.soundExplosion.play();
                 this.addScore();
             }
+
+            this.trooperManager();
         },
 
         fire: function() {
@@ -181,6 +184,36 @@
     		},
 
         onInputDown: function () {
+        },
+
+        trooperManager: function() {
+          var chanceForSpawn = 0.02;
+
+          if (Math.random() < chanceForSpawn) {
+            this.trooperSpawn();
+          }
+        },
+
+        trooperSpawn: function() {
+          var x = Math.round(this.game.width * Math.random()),
+              y = 0;
+
+          this.paraTrooper = this.add.sprite(x, y, 'paraTrooper');
+          this.paraTrooper.enableBody = true;
+
+          this.paraTrooper.animations.add('fly', [0, 4], 4, true);
+          this.paraTrooper.animations.play('fly');
+
+          this.game.physics.enable(this.paraTrooper, Phaser.Physics.ARCADE);
+          this.paraTrooper.body.velocity.y = 50;
+
+          this.paraTrooper.checkWorldBounds = true;
+          this.paraTrooper.outOfBoundsKill = true;
+        },
+
+        trooperHit: function(hitTrooper) {
+          // hitTrooper.destroy();
+          hitTrooper.kill();
         }
 
     };

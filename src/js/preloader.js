@@ -17,6 +17,8 @@
       this.load.spritesheet('player', 'assets/sprites/rasta.png', 29, 32, 10);
       this.load.spritesheet('explosion', 'assets/sprites/explosion2.png', 45, 35, 12);
       this.load.spritesheet('chopper', 'assets/sprites/chopper2.png', 138, 41, 4);
+      this.load.spritesheet('paraTrooper', 'assets/sprites/ptroop.png', 39, 45, 5);
+      this.load.spritesheet('ceilTrooper', 'assets/sprites/pt2.png', 138, 41, 4);
       this.load.image('background', 'assets/background.png');
       this.load.image('van', 'assets/sprites/van.png');
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');

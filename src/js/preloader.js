@@ -15,7 +15,7 @@
       this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
       this.load.setPreloadSprite(this.asset);
       this.load.spritesheet('player', 'assets/sprites/rasta.png', 29, 32, 10);
-      this.load.spritesheet('explosion', 'assets/sprites/explosion2.png', 45, 35, 12);
+      this.load.spritesheet('explosion', 'assets/sprites/explosion3.png', 96, 96, 20);
       this.load.spritesheet('chopper', 'assets/sprites/chopper2.png', 138, 41, 4);
       this.load.image('background', 'assets/background.png');
       this.load.image('van', 'assets/sprites/van.png');

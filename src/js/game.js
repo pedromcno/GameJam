@@ -5,6 +5,7 @@
         this.player = null;
         this.bullets = null;
         this.choppers = null;
+        this.explosion = null;
 
         this.fireRate = 100;
         this.nextFire = 0;
@@ -114,9 +115,7 @@
             this.game.physics.arcade.overlap(this.chopper, this.bullets, this.hitChopper, null, this);
 
             if (this.chopper.hits === 10 && this.chopper.alive) {
-                this.chopper.kill();
-                this.soundExplosion.play();
-                this.addScore();
+                this.killChopper();
             }
         },
 
@@ -137,6 +136,19 @@
         hitChopper: function (chopper, bullet) {
             chopper.hits += 1;
             bullet.kill();
+        },
+
+        killChopper: function () {
+          
+          this.explosion = this.add.sprite(this.chopper.body.x+this.chopper.width/2, this.chopper.body.y, 'explosion');
+
+            var ani = this.explosion.animations.add('run', null, 20, false);
+            this.explosion.animations.play('run');
+
+            this.chopper.kill();
+            this.soundExplosion.play();
+
+            this.addScore();
         },
 
         playerAiming: function() {

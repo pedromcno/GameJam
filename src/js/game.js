@@ -31,7 +31,8 @@
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.addBullets();
-			this.scoreText = this.add.text(8, 8, 'score: 0', { fontSize: '16px', fill: '#000' });
+
+            this.scoreText = this.add.text(8, 8, 'score: 0', { fontSize: '16px', fill: '#000' });
         },
 
         addSound: function() {
@@ -85,7 +86,7 @@
             this.chopper.animations.play('fly_right');
             this.game.physics.enable(this.chopper, Phaser.Physics.ARCADE);
             this.chopper.body.velocity.x = 50;
-            
+
             this.chopper.hits = 0;
             this.game.physics.arcade.enable(this.chopper);
         },
@@ -162,12 +163,11 @@
 
           this.player.animations.play(fireState + '' + aimDirection);
         },
-		
+
         addScore : function() {
           this.score +=1;
-          this.scoreText.text = 'Score: '+ this.score; 
-			
-		},
+          this.scoreText.text = 'Score: '+ this.score;
+    		},
 
         onInputDown: function () {
         }

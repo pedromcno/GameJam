@@ -9,16 +9,29 @@
 
         create: function () {
             this.addBackground();
+            this.addVan();
             this.addPlayer();
             this.input.onDown.add(this.onInputDown, this);
         },
 
         addPlayer: function() {
             var x = this.game.width / 2,
-                y = this.game.height / 2;
+                y = this.game.height - this.van.height;
 
             this.player = this.add.sprite(x, y, 'player');
-            this.player.anchor.setTo(0.5, 0.5);
+            this.player.anchor.setTo(0.5, 1);
+            this.player.scale.x = 2;
+            this.player.scale.y = 2;
+        },
+
+        addVan: function() {
+            var x = this.game.width / 2,
+                y = this.game.height;
+
+            this.van = this.add.sprite(x, y, 'van');
+            this.van.anchor.setTo(0.5, 1);
+            this.van.scale.x = 2;
+            this.van.scale.y = 2;
         },
 
         addBackground: function() {
@@ -28,22 +41,6 @@
         },
 
         update: function () {
-            var x, y, cx, cy, dx, dy, angle, scale;
-
-            x = this.input.position.x;
-            y = this.input.position.y;
-            cx = this.world.centerX;
-            cy = this.world.centerY;
-
-            angle = Math.atan2(y - cy, x - cx) * (180 / Math.PI);
-            this.player.angle = angle;
-
-            dx = x - cx;
-            dy = y - cy;
-            scale = Math.sqrt(dx * dx + dy * dy) / 100;
-
-            this.player.scale.x = scale * 0.6;
-            this.player.scale.y = scale * 0.6;
         },
 
         onInputDown: function () {

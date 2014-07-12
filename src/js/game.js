@@ -8,6 +8,8 @@
 
         this.fireRate = 100;
         this.nextFire = 0;
+		this.score = 0;
+		this.scoreText = null;
 
         // Sound Files
         this.soundShoot = null;
@@ -29,6 +31,7 @@
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.addBullets();
+			this.scoreText = this.add.text(8, 8, 'score: 0', { fontSize: '16px', fill: '#000' });
         },
 
         addSound: function() {
@@ -105,6 +108,8 @@
             }
             for (var i = 0; i < this.bullets.length; i++) {
               if (this.checkOverlap(this.bullets.getAt(i), this.chopper)) {
+			      this.soundExplosion.play();
+				  this.addScore(1);
                   this.chopper.kill();
               }
               else {
@@ -124,7 +129,7 @@
 
                     this.nextFire = this.game.time.now + this.fireRate;
                     this.game.physics.arcade.moveToPointer(bullet, 300);
-					          this.soundShoot.play();
+                    this.soundShoot.play();
             }
         },
 
@@ -159,6 +164,12 @@
 
           this.player.animations.play(fireState + '' + aimDirection);
         },
+		
+        addScore : function() {
+          this.score +=1;
+          this.scoreText.text = 'Score: '+ this.score; 
+			
+		},
 
         onInputDown: function () {
         }

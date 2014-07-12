@@ -188,7 +188,7 @@
             this.chopper.kill();
             this.soundExplosion.play();
 
-            this.addScore();
+            this.addScore(10);
         },
 
         playerAiming: function() {

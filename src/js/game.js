@@ -207,6 +207,10 @@
           this.game.physics.enable(this.paraTrooper, Phaser.Physics.ARCADE);
           this.paraTrooper.body.velocity.y = 50;
 
+          this.paraTrooper.events.onOutOfBounds.add(function() {
+              this.incineratePlantAt(Math.floor(Math.random() * (25 + 1)));
+          },this);
+
           this.paraTrooper.checkWorldBounds = true;
           this.paraTrooper.outOfBoundsKill = true;
         },

@@ -22,10 +22,12 @@
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
       this.load.image('bullet', 'assets/bullet.png');
       this.load.spritesheet('plant', 'assets/sprites/plant.png', 20, 25, 10);
-	  this.load.audio('explosion',[ '/assets/sounds/explosion.mp3','/assets/sounds/explosion.ogg']);
-	  this.load.audio('fire', [ '/assets/sounds/mg.mp3','/assets/sounds/mg.ogg']);
-	  this.load.audio('smoking',[ '/assets/sounds/smoking.mp3','/assets/sounds/smoking.ogg']);
-      this.load.audio('dead',[ '/assets/sounds/WilhelmScream.mp3','/assets/sounds/WilhelmScream.ogg']);	
+      this.load.audio('explosion',[ '/assets/sounds/explosion.mp3','/assets/sounds/explosion.ogg']);
+      this.load.audio('fire', [ '/assets/sounds/mg.mp3','/assets/sounds/mg.ogg']);
+      this.load.audio('smoking',[ '/assets/sounds/smoking.mp3','/assets/sounds/smoking.ogg']);
+      this.load.audio('dead',[ '/assets/sounds/WilhelmScream.mp3','/assets/sounds/WilhelmScream.ogg']);
+
+      this.scaleGame();
     },
 
     create: function () {
@@ -34,12 +36,36 @@
 
     update: function () {
       if (!!this.ready) {
-        this.game.state.start('menu');
+        // this.game.state.start('menu');
+        this.game.state.start('game');
       }
     },
 
     onLoadComplete: function () {
       this.ready = true;
+    },
+
+    scaleGame: function() {
+      var w = window,
+          d = document,
+          e = d.documentElement,
+          g = d.getElementsByTagName('body')[0],
+          width = w.innerWidth || e.clientWidth || g.clientWidth,
+          height = w.innerHeight|| e.clientHeight|| g.clientHeight;
+
+      var scaleFactor = width / 320;
+      if ((height / 240) < scaleFactor) {
+        scaleFactor = height / 240;
+      }
+
+      //  This sets a limit on the up-scale
+      this.scale.maxWidth = 320 * Math.floor(scaleFactor);
+      this.scale.maxHeight = 240 * Math.floor(scaleFactor);
+
+      //  Then we tell Phaser that we want it to scale up to whatever the browser can handle, but to do it proportionally
+      this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+      this.scale.setScreenSize();
+
     }
   };
 

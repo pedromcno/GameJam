@@ -8,6 +8,8 @@
 
         this.fireRate = 100;
         this.nextFire = 0;
+        this.score = 0;
+        this.scoreText = null;
 
         // Sound Files
         this.soundShoot = null;
@@ -29,6 +31,8 @@
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.addBullets();
+
+            this.scoreText = this.add.text(8, 8, 'score: 0', { font: '14px Arial', fill: '#000' });
         },
 
         addSound: function() {
@@ -40,7 +44,7 @@
 
         addPlayer: function() {
             var x = this.game.width / 2,
-                y = this.game.height - this.van.height;
+                y = this.game.height - this.van.height-40;
 
             this.player = this.add.sprite(x, y, 'player');
             this.player.anchor.setTo(0.5, 1);
@@ -66,7 +70,7 @@
             var x = this.game.width / 2,
                 y = this.game.height;
 
-            this.van = this.add.sprite(x, y, 'van');
+            this.van = this.add.sprite(x, y-40, 'van');
             this.van.anchor.setTo(0.5, 1);
         },
 
@@ -76,11 +80,15 @@
 
             this.chopper = this.add.sprite(x, y, 'chopper');
             this.chopper.anchor.setTo(0.5, 3);
+
             this.chopper.animations.add('fly_left', [0, 1], 20, true);
             this.chopper.animations.add('fly_right', [2, 3], 20, true);
             this.chopper.animations.play('fly_right');
             this.game.physics.enable(this.chopper, Phaser.Physics.ARCADE);
             this.chopper.body.velocity.x = 50;
+
+            this.chopper.hits = 0;
+            this.game.physics.arcade.enable(this.chopper);
         },
 
         addBackground: function() {
@@ -114,15 +122,13 @@
             if (this.game.input.activePointer.isDown) {
               this.fire();
             }
-            for (var i = 0; i < this.bullets.length; i++) {
-              if (this.checkOverlap(this.bullets.getAt(i), this.chopper)) {
-                  this.chopper.kill();
-              }
-              else {
-                  //text.text = 'Drag the sprites. Overlapping: false';
-              }
-            }
+            this.game.physics.arcade.overlap(this.chopper, this.bullets, this.hitChopper, null, this);
 
+            if (this.chopper.hits === 10 && this.chopper.alive) {
+                this.chopper.kill();
+                this.soundExplosion.play();
+                this.addScore();
+            }
         },
 
         fire: function() {
@@ -135,15 +141,13 @@
 
                     this.nextFire = this.game.time.now + this.fireRate;
                     this.game.physics.arcade.moveToPointer(bullet, 300);
-					          this.soundShoot.play();
+                    this.soundShoot.play();
             }
         },
 
-        checkOverlap: function (spriteA, spriteB) {
-            var boundsA = spriteA.getBounds();
-            var boundsB = spriteB.getBounds();
-
-            return Phaser.Rectangle.intersects(boundsA, boundsB);
+        hitChopper: function (chopper, bullet) {
+            chopper.hits += 1;
+            bullet.kill();
         },
 
         playerAiming: function() {
@@ -170,6 +174,11 @@
 
           this.player.animations.play(fireState + '' + aimDirection);
         },
+
+        addScore : function() {
+          this.score +=1;
+          this.scoreText.text = 'Score: '+ this.score;
+    		},
 
         onInputDown: function () {
         }

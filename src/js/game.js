@@ -67,7 +67,7 @@
             if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0) {
                     this.nextFire = this.game.time.now + this.fireRate;
                     var bullet = this.bullets.getFirstDead();
-                    bullet.reset(this.player.x - 8, this.player.y - 8);
+                    bullet.reset(this.player.x - this.player.width/20, this.player.y - this.player.height);
                     this.game.physics.arcade.moveToPointer(bullet, 300);
             }
         },

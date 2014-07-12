@@ -13,6 +13,7 @@
 		this.soundSmoke = null;
 		this.soundDead = null;
 		this.soundExplosion = null;
+        this.farm = new window['ganja-farmer'].Farm();
     }
 
     Game.prototype = {
@@ -24,6 +25,7 @@
             this.addPlayer();
 			this.addSound();
             this.input.onDown.add(this.onInputDown, this);
+            console.log(this.farm);
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.addBullets();
@@ -52,6 +54,7 @@
             this.van = this.add.sprite(x, y, 'van');
             this.van.anchor.setTo(0.5, 1);
         },
+
         addChopper: function() {
             var x = this.game.width / 4,
                 y = this.game.height/2;

@@ -17,15 +17,16 @@
         this.soundSmoke = null;
         this.soundDead = null;
         this.soundExplosion = null;
-        this.farm = new window['ganja-farmer'].Farm();
     }
 
     Game.prototype = {
 
         create: function () {
             this.addBackground();
-            this.addVan();
             this.addChopper();
+            this.addChoppers();
+            this.addFarm();
+            this.addVan();
             this.addPlayer();
             this.addSound();
             this.input.onDown.add(this.onInputDown, this);
@@ -45,7 +46,7 @@
 
         addPlayer: function() {
             var x = this.game.width / 2,
-                y = this.game.height - this.van.height;
+                y = this.game.height - this.van.height-40;
 
             this.player = this.add.sprite(x, y, 'player');
             this.player.anchor.setTo(0.5, 1);
@@ -71,7 +72,7 @@
             var x = this.game.width / 2,
                 y = this.game.height;
 
-            this.van = this.add.sprite(x, y, 'van');
+            this.van = this.add.sprite(x, y-40, 'van');
             this.van.anchor.setTo(0.5, 1);
         },
 
@@ -91,6 +92,29 @@
             this.chopper.hits = 0;
             this.game.physics.arcade.enable(this.chopper);
         },
+        addChoppers: function() {
+            this.choppers = this.game.add.group();
+
+
+            for (var i = 0; i < 6; i++)
+            {
+                //  This creates a new Phaser.Sprite instance within the group
+                //  It will be randomly placed within the world and use the 'baddie' image to display
+                var heli = this.choppers.create(400, Math.random() * 100, 'chopper');
+                heli.enableBody = true;
+                this.game.physics.enable(heli, Phaser.Physics.ARCADE);
+
+                heli.body.velocity.x =  (10 + Math.random() * 50) * (-1);
+            }
+
+            this.choppers.callAll('animations.add', 'animations', 'fly_left', [0, 1], 20, true);
+            this.choppers.callAll('animations.play', 'animations', 'fly_left');
+            this.choppers.enableBody = true;
+            this.choppers.physicsBodyType = Phaser.Physics.ARCADE;
+
+
+        },
+
 
         addBackground: function() {
             this.add.sprite(0, 0, 'background');
@@ -106,6 +130,19 @@
           this.bullets.setAll('outOfBoundsKill', true);
         },
 
+        addFarm: function() {
+            this.farm = this.game.add.group();
+            for(var i = 0; i < 25 ; i++) {
+                this.farm.create(7+i * 12, 155, 'plant', false);
+            }
+            this.farm.callAll('animations.add', 'animations', 'burn', [2, 3, 4], 10, true);
+        },
+
+        incineratePlantAt: function(index) {
+            if(this.farm.getAt(index).animations) {
+                this.farm.getAt(index).animations.play('burn', 7, true);
+            }
+        },
 
         update: function () {
             this.playerAiming();
@@ -113,10 +150,13 @@
               this.fire();
             }
             this.game.physics.arcade.overlap(this.chopper, this.bullets, this.hitChopper, null, this);
+            this.game.physics.arcade.overlap(this.paraTrooper, this.bullets, this.trooperHit, null, this);
 
             if (this.chopper.hits === 10 && this.chopper.alive) {
                 this.killChopper();
             }
+
+            this.trooperManager();
         },
 
         fire: function() {
@@ -176,12 +216,48 @@
           this.player.animations.play(fireState + '' + aimDirection);
         },
 
-        addScore : function() {
-          this.score +=1;
+        addScore : function(points) {
+          this.score +=points;
           this.scoreText.text = 'Score: '+ this.score;
     		},
 
         onInputDown: function () {
+        },
+
+        trooperManager: function() {
+          var chanceForSpawn = 0.02;
+
+          if (Math.random() < chanceForSpawn) {
+            this.trooperSpawn();
+          }
+        },
+
+        trooperSpawn: function() {
+          var x = Math.round(this.game.width * Math.random()),
+              y = 0;
+
+          this.paraTrooper = this.add.sprite(x, y, 'paraTrooper');
+          this.paraTrooper.enableBody = true;
+
+          this.paraTrooper.animations.add('fly', [0, 1, 2, 3, 4, 3 ,2, 1, 0], 8, true);
+          this.paraTrooper.animations.play('fly');
+
+          this.game.physics.enable(this.paraTrooper, Phaser.Physics.ARCADE);
+          this.paraTrooper.body.velocity.y = 50;
+
+          this.paraTrooper.events.onOutOfBounds.add(function() {
+              this.incineratePlantAt(Math.floor(Math.random() * (25 + 1)));
+          },this);
+
+          this.paraTrooper.checkWorldBounds = true;
+          this.paraTrooper.outOfBoundsKill = true;
+        },
+
+        trooperHit: function(hitTrooper) {
+          // hitTrooper.destroy();
+          hitTrooper.kill();
+          this.addScore(1);
+          this.soundDead.play();
         }
 
     };

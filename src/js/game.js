@@ -32,7 +32,7 @@
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.addBullets();
 
-            this.scoreText = this.add.text(8, 8, 'score: 0', { fontSize: '16px', fill: '#000' });
+            this.scoreText = this.add.text(8, 8, 'score: 0', { font: '14px Arial', fill: '#000' });
         },
 
         addSound: function() {

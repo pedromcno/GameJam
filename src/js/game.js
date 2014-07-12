@@ -8,12 +8,12 @@
 
         this.fireRate = 100;
         this.nextFire = 0;
-		
-		// Sound Files
-		this.soundShoot = null;
-		this.soundSmoke = null;
-		this.soundDead = null;
-		this.soundExplosion = null;
+
+        // Sound Files
+        this.soundShoot = null;
+        this.soundSmoke = null;
+        this.soundDead = null;
+        this.soundExplosion = null;
         this.farm = new window['ganja-farmer'].Farm();
     }
 
@@ -24,28 +24,42 @@
             this.addVan();
             this.addChopper();
             this.addPlayer();
-			this.addSound();
+            this.addSound();
             this.input.onDown.add(this.onInputDown, this);
-            console.log(this.farm);
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.addBullets();
         },
 
-		addSound: function() {
-		  this.soundShoot = this.add.audio('fire');
-		  this.soundSmoke = this.add.audio('smoking');
-		  this.soundDead = this.add.audio('dead');
-		  this.soundExplosion = this.add.audio('explosion');
-		  
-		},
-		
+        addSound: function() {
+            this.soundShoot = this.add.audio('fire');
+            this.soundSmoke = this.add.audio('smoking');
+            this.soundDead = this.add.audio('dead');
+            this.soundExplosion = this.add.audio('explosion');
+        },
+
         addPlayer: function() {
             var x = this.game.width / 2,
                 y = this.game.height - this.van.height;
 
             this.player = this.add.sprite(x, y, 'player');
             this.player.anchor.setTo(0.5, 1);
+
+            // states & animation
+            this.player.animations.add('defaultU',[0],15,false);
+            this.player.animations.add('fireU',[0,1],15,true);
+
+            this.player.animations.add('defaultUR',[2],15,false);
+            this.player.animations.add('fireUR',[2,3],15,true);
+
+            this.player.animations.add('defaultR',[6],15,false);
+            this.player.animations.add('fireR',[6,7],15,true);
+
+            this.player.animations.add('defaultUL',[4],15,false);
+            this.player.animations.add('fireUL',[4,5],15,true);
+
+            this.player.animations.add('defaultL',[8],15,false);
+            this.player.animations.add('fireL',[8,9],15,true);
         },
 
         addVan: function() {
@@ -82,9 +96,10 @@
           this.bullets.setAll('checkWorldBounds', true);
           this.bullets.setAll('outOfBoundsKill', true);
         },
-		
+
 
         update: function () {
+            this.playerAiming();
             if (this.game.input.activePointer.isDown) {
               this.fire();
             }
@@ -96,16 +111,20 @@
                   //text.text = 'Drag the sprites. Overlapping: false';
               }
             }
-            
+
         },
 
         fire: function() {
             if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0) {
-                    this.nextFire = this.game.time.now + this.fireRate;
                     var bullet = this.bullets.getFirstDead();
-                    bullet.reset(this.player.x - this.player.width/20, this.player.y - this.player.height);
+                    var x = this.player.x - (this.player.width / 20),
+                        y = this.player.y - (this.player.height / 2);
+
+                    bullet.reset(x, y);
+
+                    this.nextFire = this.game.time.now + this.fireRate;
                     this.game.physics.arcade.moveToPointer(bullet, 300);
-					this.soundShoot.play();
+					          this.soundShoot.play();
             }
         },
 
@@ -114,6 +133,31 @@
             var boundsB = spriteB.getBounds();
 
             return Phaser.Rectangle.intersects(boundsA, boundsB);
+        },
+
+        playerAiming: function() {
+          var aimPosition = this.physics.arcade.angleToPointer(this.player);
+
+          var fireState = 'default';
+          if (this.game.input.activePointer.isDown) {
+            fireState = 'fire';
+          }
+
+          var aimDirection = 'U';
+          if (aimPosition < -2.3) {
+            aimDirection = 'L';
+          }
+          else if (aimPosition < -1.7) {
+            aimDirection = 'UL';
+          }
+          else if (aimPosition > -0.6) {
+            aimDirection = 'R';
+          }
+          else if (aimPosition > -1.2) {
+            aimDirection = 'UR';
+          }
+
+          this.player.animations.play(fireState + '' + aimDirection);
         },
 
         onInputDown: function () {

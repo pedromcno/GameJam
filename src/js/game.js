@@ -14,6 +14,7 @@
         create: function () {
             this.addBackground();
             this.addVan();
+            this.addChopper();
             this.addPlayer();
             this.input.onDown.add(this.onInputDown, this);
 
@@ -35,6 +36,13 @@
 
             this.van = this.add.sprite(x, y, 'van');
             this.van.anchor.setTo(0.5, 1);
+        },
+        addChopper: function() {
+            var x = this.game.width / 4,
+                y = this.game.height/2;
+
+            this.chopper = this.add.sprite(x, y, 'chopper');
+            this.chopper.anchor.setTo(0.5, 3);
         },
 
         addBackground: function() {

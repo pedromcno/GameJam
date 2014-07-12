@@ -4,6 +4,7 @@
     function Game() {
         this.player = null;
         this.bullets = null;
+        this.choppers = null;
 
         this.fireRate = 100;
         this.nextFire = 0;
@@ -58,8 +59,11 @@
 
             this.chopper = this.add.sprite(x, y, 'chopper');
             this.chopper.anchor.setTo(0.5, 3);
-            this.chopper.animations.add('fly_left');
-            this.chopper.animations.play('fly_left', 20, true, true);
+            this.chopper.animations.add('fly_left', [0, 1], 20, true);
+            this.chopper.animations.add('fly_right', [2, 3], 20, true);
+            this.chopper.animations.play('fly_right');
+            this.game.physics.enable(this.chopper, Phaser.Physics.ARCADE);
+            this.chopper.body.velocity.x = 50;
         },
 
         addBackground: function() {

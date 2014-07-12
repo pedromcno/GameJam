@@ -8,7 +8,7 @@
         this.troopers = null;
         this.explosion = null;
 
-        this.fireRate = 50;
+        this.fireRate = 75;
         this.nextFire = 0;
         this.score = 0;
         this.scoreText = null;
@@ -115,6 +115,8 @@
           this.bullets.createMultiple(50, 'bullet');
           this.bullets.setAll('checkWorldBounds', true);
           this.bullets.setAll('outOfBoundsKill', true);
+          this.bullets.setAll('scale.x', 0.3);
+          this.bullets.setAll('scale.y', 0.3);
         },
 
         addFarm: function() {

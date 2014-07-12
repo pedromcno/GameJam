@@ -20,6 +20,7 @@
         create: function () {
             this.addBackground();
             this.addVan();
+            this.addChopper();
             this.addPlayer();
 			this.addSound();
             this.input.onDown.add(this.onInputDown, this);
@@ -51,6 +52,15 @@
             this.van = this.add.sprite(x, y, 'van');
             this.van.anchor.setTo(0.5, 1);
         },
+        addChopper: function() {
+            var x = this.game.width / 4,
+                y = this.game.height/2;
+
+            this.chopper = this.add.sprite(x, y, 'chopper');
+            this.chopper.anchor.setTo(0.5, 3);
+            this.chopper.animations.add('fly_left');
+            this.chopper.animations.play('fly_left', 20, true, true);
+        },
 
         addBackground: function() {
             this.add.sprite(0, 0, 'background');
@@ -71,6 +81,15 @@
             if (this.game.input.activePointer.isDown) {
               this.fire();
             }
+            for (var i = 0; i < this.bullets.length; i++) {
+              if (this.checkOverlap(this.bullets.getAt(i), this.chopper)) {
+                  this.chopper.kill();
+              }
+              else {
+                  //text.text = 'Drag the sprites. Overlapping: false';
+              }
+            }
+            
         },
 
         fire: function() {
@@ -81,6 +100,13 @@
                     this.game.physics.arcade.moveToPointer(bullet, 300);
 					this.soundShoot.play();
             }
+        },
+
+        checkOverlap: function (spriteA, spriteB) {
+            var boundsA = spriteA.getBounds();
+            var boundsB = spriteB.getBounds();
+
+            return Phaser.Rectangle.intersects(boundsA, boundsB);
         },
 
         onInputDown: function () {

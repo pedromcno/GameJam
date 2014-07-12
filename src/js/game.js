@@ -138,7 +138,9 @@
         },
 
         incineratePlantAt: function(index) {
-            this.farm.getAt(index).animations.play('burn', 7, true);
+            if(this.farm.getAt(index)) {
+                this.farm.getAt(index).animations.play('burn', 7, true);
+            }
         },
 
         update: function () {

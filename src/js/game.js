@@ -112,10 +112,10 @@
             }
             this.game.physics.arcade.overlap(this.chopper, this.bullets, this.hitChopper, null, this);
 
-            if (this.chopper.hits === 10) {
-                // this.soundExplosion.play();
-                // this.addScore(1);
+            if (this.chopper.hits === 10 && this.chopper.alive) {
                 this.chopper.kill();
+                this.soundExplosion.play();
+                this.addScore();
             }
         },
 
@@ -134,7 +134,6 @@
         },
 
         hitChopper: function (chopper, bullet) {
-            //chopper.kill();
             chopper.hits += 1;
             bullet.kill();
         },

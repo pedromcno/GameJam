@@ -4,7 +4,7 @@ window.onload = function () {
   var game
     , ns = window['ganja-farmer'];
 
-  game = new Phaser.Game(640, 480, Phaser.AUTO, 'ganja-farmer-game');
+  game = new Phaser.Game(320, 240, Phaser.AUTO, 'ganja-farmer-game');
   game.state.add('boot', ns.Boot);
   game.state.add('preloader', ns.Preloader);
   game.state.add('menu', ns.Menu);

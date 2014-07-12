@@ -1,36 +1,36 @@
 (function () {
-  'use strict';
+    'use strict';
 
-  function Boot() {}
+    function Boot() {}
 
-  Boot.prototype = {
-    
-    preload: function () {
-      this.load.image('preloader', 'assets/preloader.gif');
-    },
+    Boot.prototype = {
 
-    create: function () {
-      this.game.input.maxPointers = 1;
-      // this.game.stage.disableVisibilityChange = true;
+        preload: function () {
+            this.load.image('preloader', 'assets/preloader.gif');
+        },
 
-      if (this.game.device.desktop) {
-        this.game.stage.scale.pageAlignHorizontally = true;
-      } else {
-        this.game.stage.scaleMode = Phaser.StageScaleMode.SHOW_ALL;
-        this.game.stage.scale.minWidth =  480;
-        this.game.stage.scale.minHeight = 260;
-        this.game.stage.scale.maxWidth = 640;
-        this.game.stage.scale.maxHeight = 480;
-        this.game.stage.scale.forceLandscape = true;
-        this.game.stage.scale.pageAlignHorizontally = true;
-        this.game.stage.scale.setScreenSize(true);
-      }
-      this.game.state.start('preloader');
-    }
-  };
+        create: function () {
+            this.game.input.maxPointers = 1;
+            // this.game.stage.disableVisibilityChange = true;
 
-  window['ganja-farmer'] = window['ganja-farmer'] || {};
-  window['ganja-farmer'].Boot = Boot;
+            if (this.game.device.desktop) {
+                this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+                this.game.stage.scale.pageAlignHorizontally = true;
+            } else {
+                this.game.stage.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+                this.game.stage.scale.minWidth = 480;
+                this.game.stage.scale.minHeight = 260;
+                this.game.stage.scale.maxWidth = 640;
+                this.game.stage.scale.maxHeight = 480;
+                this.game.stage.scale.forceLandscape = true;
+                this.game.stage.scale.pageAlignHorizontally = true;
+                this.game.stage.scale.setScreenSize(true);
+            }
+            this.game.state.start('preloader');
+        }
+    };
+
+    window['ganja-farmer'] = window['ganja-farmer'] || {};
+    window['ganja-farmer'].Boot = Boot;
 
 }());
-

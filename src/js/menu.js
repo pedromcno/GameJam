@@ -30,6 +30,7 @@
     },
 
     onDown: function () {
+        this.game.scale.startFullScreen();
       this.game.state.start('game');
     }
   };

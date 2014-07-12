@@ -23,8 +23,6 @@
 
         addBackground: function() {
             var background = this.add.sprite(0, 0, 'background');
-            background.scale.x = 2;
-            background.scale.y = 2;
         },
 
         update: function () {

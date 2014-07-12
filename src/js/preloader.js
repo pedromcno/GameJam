@@ -21,6 +21,10 @@
       this.load.image('van', 'assets/sprites/van.png');
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
       this.load.image('bullet', 'assets/bullet.png');
+	  this.load.audio('explosion',[ '/assets/sounds/explosion.mp3','/assets/sounds/explosion.ogg']);
+	  this.load.audio('fire', [ '/assets/sounds/mg.mp3','/assets/sounds/mg.ogg']);
+	  this.load.audio('smoking',[ '/assets/sounds/smoking.mp3','/assets/sounds/smoking.ogg']);
+      this.load.audio('dead',[ '/assets/sounds/WilhelmScream.mp3','/assets/sounds/WilhelmScream.ogg']);	
     },
 
     create: function () {

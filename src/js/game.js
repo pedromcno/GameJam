@@ -128,7 +128,7 @@
             if (this.chopper.hits === 10 && this.chopper.alive) {
                 this.chopper.kill();
                 this.soundExplosion.play();
-                this.addScore();
+                this.addScore(20);
             }
 
             this.trooperManager();
@@ -178,8 +178,8 @@
           this.player.animations.play(fireState + '' + aimDirection);
         },
 
-        addScore : function() {
-          this.score +=1;
+        addScore : function(points) {
+          this.score +=points;
           this.scoreText.text = 'Score: '+ this.score;
     		},
 
@@ -214,6 +214,7 @@
         trooperHit: function(hitTrooper) {
           // hitTrooper.destroy();
           hitTrooper.kill();
+          this.addScore(1);
         }
 
     };

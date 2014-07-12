@@ -43,6 +43,8 @@
 
             this.chopper = this.add.sprite(x, y, 'chopper');
             this.chopper.anchor.setTo(0.5, 3);
+            this.chopper.animations.add('fly_left');
+            this.chopper.animations.play('fly_left', 20, true, true);
         },
 
         addBackground: function() {

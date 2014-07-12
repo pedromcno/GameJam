@@ -14,8 +14,9 @@
 
       this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
       this.load.setPreloadSprite(this.asset);
-      this.load.image('player', 'assets/player.png');
+      this.load.spritesheet('player', 'assets/sprites/rasta.png', 29, 32, 10);
       this.load.image('background', 'assets/background.png');
+      this.load.image('van', 'assets/sprites/van.png');
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
     },
 

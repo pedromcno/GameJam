@@ -47,7 +47,6 @@
         },
 
         onInputDown: function () {
-            this.game.state.start('menu');
         }
 
     };

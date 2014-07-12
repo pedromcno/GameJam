@@ -8,8 +8,8 @@
 
         this.fireRate = 100;
         this.nextFire = 0;
-		this.score = 0;
-		this.scoreText = null;
+        this.score = 0;
+        this.scoreText = null;
 
         // Sound Files
         this.soundShoot = null;

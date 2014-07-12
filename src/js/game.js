@@ -225,7 +225,7 @@
           this.paraTrooper = this.add.sprite(x, y, 'paraTrooper');
           this.paraTrooper.enableBody = true;
 
-          this.paraTrooper.animations.add('fly', [0, 4], 4, true);
+          this.paraTrooper.animations.add('fly', [0, 1, 2, 3, 4, 3 ,2, 1, 0], 8, true);
           this.paraTrooper.animations.play('fly');
 
           this.game.physics.enable(this.paraTrooper, Phaser.Physics.ARCADE);

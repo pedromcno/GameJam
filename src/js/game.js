@@ -44,7 +44,7 @@
 
         addPlayer: function() {
             var x = this.game.width / 2,
-                y = this.game.height - this.van.height;
+                y = this.game.height - this.van.height-40;
 
             this.player = this.add.sprite(x, y, 'player');
             this.player.anchor.setTo(0.5, 1);
@@ -70,7 +70,7 @@
             var x = this.game.width / 2,
                 y = this.game.height;
 
-            this.van = this.add.sprite(x, y, 'van');
+            this.van = this.add.sprite(x, y-40, 'van');
             this.van.anchor.setTo(0.5, 1);
         },
 

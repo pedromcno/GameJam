@@ -5,9 +5,10 @@
         this.player = null;
         this.bullets = null;
         this.choppers = null;
+        this.troopers = null;
         this.explosion = null;
 
-        this.fireRate = 100;
+        this.fireRate = 50;
         this.nextFire = 0;
         this.score = 0;
         this.scoreText = null;
@@ -23,8 +24,8 @@
 
         create: function () {
             this.addBackground();
-            //this.addChopper();
             this.addChoppers();
+            this.addTroopers();
             this.addFarm();
             this.addVan();
             this.addPlayer();
@@ -75,24 +76,6 @@
             this.van = this.add.sprite(x, y-40, 'van');
             this.van.anchor.setTo(0.5, 1);
         },
-
-        /*
-        addChopper: function() {
-            var x = this.game.width / 4,
-                y = this.game.height/2;
-
-            this.chopper = this.add.sprite(x, y, 'chopper');
-            this.chopper.anchor.setTo(0.5, 3);
-
-            this.chopper.animations.add('fly_left', [0, 1], 20, true);
-            this.chopper.animations.add('fly_right', [2, 3], 20, true);
-            this.chopper.animations.play('fly_right');
-            this.game.physics.enable(this.chopper, Phaser.Physics.ARCADE);
-            this.chopper.body.velocity.x = 50;
-
-            this.chopper.hits = 0;
-            this.game.physics.arcade.enable(this.chopper);
-        },*/
         
         addChoppers: function() {
             this.choppers = this.game.add.group();
@@ -154,7 +137,7 @@
               this.fire();
             }
             this.game.physics.arcade.overlap(this.choppers, this.bullets, this.hitChopper, null, this);
-            this.game.physics.arcade.overlap(this.paraTrooper, this.bullets, this.trooperHit, null, this);
+            this.game.physics.arcade.overlap(this.troopers, this.bullets, this.hitTrooper, null, this);
 
             this.choppers.forEachAlive(function(chopper) {
               if (chopper.hits === 10) {
@@ -164,7 +147,7 @@
 
             
 
-            this.trooperManager();
+            this.spanTrooper();
         },
 
         fire: function() {
@@ -233,38 +216,42 @@
         onInputDown: function () {
         },
 
-        trooperManager: function() {
+        spanTrooper: function() {
           var chanceForSpawn = 0.02;
 
           if (Math.random() < chanceForSpawn) {
-            this.trooperSpawn();
+            var trooper = this.troopers.getFirstDead();
+
+            var x = Math.round(this.game.width * Math.random()),
+                y = 0;
+
+            trooper.reset(x, y);
+            trooper.body.velocity.y = 50;
+            trooper.events.onOutOfBounds.add(function() {
+              this.incineratePlantAt(Math.floor(Math.random() * (25 + 1)));
+            },this);
           }
         },
 
-        trooperSpawn: function() {
-          var x = Math.round(this.game.width * Math.random()),
-              y = 0;
+        addTroopers: function() {
 
-          this.paraTrooper = this.add.sprite(x, y, 'paraTrooper');
-          this.paraTrooper.enableBody = true;
+          this.troopers = this.game.add.group();
+          this.troopers.enableBody = true;
+          this.troopers.physicsBodyType = Phaser.Physics.ARCADE;
 
-          this.paraTrooper.animations.add('fly', [0, 1, 2, 3, 4, 3 ,2, 1, 0], 8, true);
-          this.paraTrooper.animations.play('fly');
+          this.troopers.createMultiple(50, 'paraTrooper');
+          this.troopers.setAll('checkWorldBounds', true);
+          this.troopers.setAll('outOfBoundsKill', true);
 
-          this.game.physics.enable(this.paraTrooper, Phaser.Physics.ARCADE);
-          this.paraTrooper.body.velocity.y = 50;
+          this.troopers.callAll('animations.add', 'animations', 'fly', [0, 1, 2, 3, 4, 3 ,2, 1, 0], 8, true);
+          this.troopers.callAll('animations.play', 'animations', 'fly');
 
-          this.paraTrooper.events.onOutOfBounds.add(function() {
-              this.incineratePlantAt(Math.floor(Math.random() * (25 + 1)));
-          },this);
 
-          this.paraTrooper.checkWorldBounds = true;
-          this.paraTrooper.outOfBoundsKill = true;
+
         },
 
-        trooperHit: function(hitTrooper) {
-          // hitTrooper.destroy();
-          hitTrooper.kill();
+        hitTrooper: function(trooper) {
+          trooper.kill();
           this.addScore(1);
           this.soundDead.play();
         }
